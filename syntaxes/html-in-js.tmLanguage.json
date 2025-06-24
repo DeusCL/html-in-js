@@ -1,0 +1,126 @@
+{
+  "scopeName": "inline.html.js",
+  "injectionSelector": "L:source.js",
+  "patterns": [
+    {
+      "name": "meta.html-template-literal.js",
+      "begin": "(\\s*\\/\\*\\s*html\\s*\\*\\/\\s*)(`)",
+      "end": "(`)",
+      "beginCaptures": {
+        "1": {
+          "name": "comment.block.documentation.js"
+        },
+        "2": {
+          "name": "punctuation.definition.string.template.begin.js"
+        }
+      },
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.string.template.end.js"
+        }
+      },
+      "contentName": "meta.embedded.block.html",
+      "patterns": [
+        {
+          "include": "#template-substitution-element"
+        },
+        {
+          "include": "#html-with-js-expressions"
+        }
+      ]
+    }
+  ],
+  "repository": {
+    "template-substitution-element": {
+      "name": "meta.template.expression.js",
+      "begin": "\\$\\{",
+      "end": "\\}",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.template-expression.begin.js"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.template-expression.end.js"
+        }
+      },
+      "patterns": [
+        {
+          "include": "source.js"
+        }
+      ]
+    },
+    "html-with-js-expressions": {
+      "patterns": [
+        {
+          "include": "#html-tag-with-js-attributes"
+        },
+        {
+          "include": "text.html.basic"
+        }
+      ]
+    },
+    "html-tag-with-js-attributes": {
+      "name": "meta.tag.any.html",
+      "begin": "(<)([a-zA-Z0-9:-]+)(?=[^>]*>)",
+      "end": "(>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.html"
+        },
+        "2": {
+          "name": "entity.name.tag.html"
+        }
+      },
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.end.html"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#html-attribute-with-js-expression"
+        },
+        {
+          "include": "text.html.basic#attribute"
+        }
+      ]
+    },
+    "html-attribute-with-js-expression": {
+      "patterns": [
+        {
+          "name": "meta.attribute.html",
+          "begin": "\\b([a-zA-Z0-9:-]+)\\s*(=)\\s*([\"'])",
+          "end": "\\3",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.other.attribute-name.html"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.html"
+            },
+            "3": {
+              "name": "punctuation.definition.string.begin.html"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.html"
+            }
+          },
+          "contentName": "string.quoted.html",
+          "patterns": [
+            {
+              "include": "#template-substitution-element"
+            },
+            {
+              "name": "constant.character.entity.html",
+              "match": "&[a-zA-Z0-9]+;"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

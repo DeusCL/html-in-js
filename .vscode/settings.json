@@ -1,0 +1,38 @@
+{
+  "emmet.includeLanguages": {
+    "javascript": "html"
+  },
+  "emmet.showExpandedAbbreviation": "always",
+  "emmet.triggerExpansionOnTab": true,
+  "emmet.showSuggestionsAsSnippets": true,
+  "emmet.showAbbreviationSuggestions": true,
+
+  // Configuración específica para JavaScript
+  "[javascript]": {
+    "editor.suggest.showWords": false,
+    "editor.suggest.showSnippets": true,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.suggest.localityBonus": false,
+    "editor.suggest.shareSuggestSelections": false
+  },
+
+  // Configuración específica de Emmet para JavaScript
+  "emmet.preferences": {
+    "html.tag_case": "lower",
+    "html.attr_case": "lower",
+    "html.attr_quotes": "double",
+    "html.self_closing_tag": false
+  },
+
+  "emmet.syntaxProfiles": {
+    "javascript": {
+      "filters": "html",
+      "self_closing_tag": false
+    }
+  }
+}

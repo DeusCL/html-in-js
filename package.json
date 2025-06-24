@@ -1,0 +1,90 @@
+{
+  "name": "html-in-js",
+  "displayName": "HTML in JS",
+  "description": "Resalta sintaxis HTML en template literals de JavaScript con comentario /*html*/",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "grammars": [
+      {
+        "path": "./syntaxes/html-in-js.tmLanguage.json",
+        "scopeName": "inline.html.js",
+        "injectTo": [
+          "source.js"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.html": "html",
+          "source.css": "css",
+          "source.js": "javascript"
+        }
+      },
+      {
+        "path": "./syntaxes/html-script-injection.tmLanguage.json",
+        "scopeName": "inline.html.script.injection",
+        "injectTo": [
+          "text.html.basic",
+          "text.html.derivative",
+          "text.html"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.html": "html",
+          "source.js": "javascript",
+          "source.css": "css"
+        }
+      }
+    ],
+    "languages": [
+      {
+        "id": "html-in-js",
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "configurationDefaults": {
+      "emmet.includeLanguages": {
+        "javascript": "html"
+      },
+      "emmet.showExpandedAbbreviation": "always",
+      "emmet.triggerExpansionOnTab": true,
+      "emmet.showSuggestionsAsSnippets": true,
+      "emmet.showAbbreviationSuggestions": true,
+      "[javascript]": {
+        "editor.suggest.showWords": false,
+        "editor.suggest.showSnippets": true,
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.quickSuggestions": {
+          "other": true,
+          "comments": false,
+          "strings": true
+        }
+      },
+      "emmet.syntaxProfiles": {
+        "javascript": {
+          "filters": "html", 
+          "self_closing_tag": false
+        }
+      },
+      "emmet.preferences": {
+        "html.tag_case": "lower",
+        "html.attr_case": "lower", 
+        "html.attr_quotes": "double",
+        "html.self_closing_tag": false
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  }
+}
