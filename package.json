@@ -2,7 +2,7 @@
   "name": "html-in-js",
   "displayName": "HTML in JS",
   "description": "Resalta sintaxis HTML en template literals de JavaScript con comentario /*html*/",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -82,13 +82,13 @@
       },
       "emmet.syntaxProfiles": {
         "javascript": {
-          "filters": "html", 
+          "filters": "html",
           "self_closing_tag": false
         }
       },
       "emmet.preferences": {
         "html.tag_case": "lower",
-        "html.attr_case": "lower", 
+        "html.attr_case": "lower",
         "html.attr_quotes": "double",
         "html.self_closing_tag": false
       }
