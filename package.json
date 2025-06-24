@@ -3,6 +3,7 @@
   "displayName": "HTML in JS",
   "description": "A simple VSCode extension that adds HTML highlighting inside JS template literals",
   "version": "1.0.2",
+  "icon": "images/logo.png",
   "engines": {
     "vscode": "^1.74.0"
   },
