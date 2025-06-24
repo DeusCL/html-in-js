@@ -1,8 +1,8 @@
 {
   "name": "html-in-js",
   "displayName": "HTML in JS",
-  "description": "Resalta sintaxis HTML en template literals de JavaScript con comentario /*html*/",
-  "version": "1.0.1",
+  "description": "A simple VSCode extension that adds HTML highlighting inside JS template literals",
+  "version": "1.0.2",
   "engines": {
     "vscode": "^1.74.0"
   },
