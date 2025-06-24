@@ -1,88 +1,58 @@
-# HTML in JS - Extensión para VS Code
+# HTML in JS - VS Code Extension
 
-Esta extensión permite resaltar sintaxis HTML dentro de template literals de JavaScript cuando se usa el comentario `/*html*/` y habilita las abreviaciones Emmet.
+This extension enables HTML syntax highlighting inside JavaScript template literals when using the `/*html*/` comment and enables Emmet abbreviations.
 
-## Características
+## Features
 
-- ✅ Resaltado de sintaxis HTML en template literals
-- ✅ Soporte para Emmet abbreviations
-- ✅ Funciona en archivos `.js` y `.html`
-- ✅ Soporte para interpolación JavaScript dentro del HTML (`${variable}`)
+- HTML syntax highlighting in template literals
+- Support for Emmet abbreviations
+- Works in `.js` and `.html` files
+- Support for JavaScript interpolation inside HTML (`${variable}`)
 
-## Uso
+## Usage
 
-### En archivos JavaScript (.js)
+### In JavaScript files (.js)
 ```javascript
-const element = /*html*/`
+const element = /*html*/ `
   <div class="container">
-    <h1>Hola Mundo</h1>
-    <p>Este texto está resaltado como HTML</p>
+    <h1>Hello World</h1>
+    <p>This text is highlighted as HTML</p>
   </div>
 `;
 ```
 
-### En archivos HTML con script tags
+### In HTML files with script tags
 ```html
-<script>
-  const element = /*html*/`
+<script type="module">
+  const element = /*html*/ `
     <div class="container">
-      <h1>Hola Mundo</h1>
-      <p>Este texto está resaltado como HTML</p>
+      <h1>Hello World</h1>
+      <p>This text is highlighted as HTML</p>
     </div>
   `;
 </script>
 ```
 
-### Usando Emmet
-Dentro de un template literal con `/*html*/`, puedes usar abreviaciones de Emmet:
+In order to see emmet abbreviation suggestions you must have to setup the `<script>` tag as `<script type="module">`.
 
-```javascript
-const element = /*html*/`
-  div.container>h1+p.description
-`;
+
+### Using `${variables}` inside the `/*html*/` template literal
+```html
+<script type="module">
+  const Component = (title, text, class="container") = /*html*/ `
+    <div class="${class}">
+      <h1>${title}</h1>
+      <p>${text}</p>
+    </div>
+  `;
+
+  document.body.innerHTML += Component("Hello World", "This text is highlighted as HTML");
+</script>
 ```
 
-Presiona `Tab` para expandir la abreviación a:
 
-```javascript
-const element = /*html*/`
-  <div class="container">
-    <h1></h1>
-    <p class="description"></p>
-  </div>
-`;
-```
+## Notes
 
-## Instalación
-
-1. Copia todos los archivos a una carpeta de proyecto
-2. Abre la terminal en esa carpeta
-3. Ejecuta: `npm install`
-4. Compila el proyecto: `npm run compile`
-5. Presiona `F5` para abrir una nueva ventana de VS Code con la extensión cargada
-
-## Desarrollo
-
-Para modificar la extensión:
-
-1. Edita los archivos según necesites
-2. Ejecuta `npm run compile` para compilar
-3. Presiona `Ctrl+R` en la ventana de desarrollo para recargar la extensión
-
-## Archivos principales
-
-- `package.json`: Configuración de la extensión
-- `src/extension.ts`: Lógica principal de la extensión
-- `syntaxes/html-in-js.tmLanguage.json`: Gramática para el resaltado de sintaxis
-- `language-configuration.json`: Configuración del lenguaje
-
-## Requisitos
-
-- VS Code 1.74.0 o superior
-- Node.js para desarrollo
-
-## Notas
-
-- La extensión detecta automáticamente el comentario `/*html*/` antes de template literals
-- El resaltado funciona tanto en archivos `.js` como dentro de tags `<script>` en archivos `.html`
-- Emmet se activa automáticamente cuando estás escribiendo dentro de estos template literals
+- The extension automatically detects the `/*html*/` comment before template literals
+- Highlighting works in both `.js` files and inside `<script>` tags in `.html` files
+- Emmet is automatically activated when you're typing inside these template literals
