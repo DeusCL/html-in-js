@@ -3,20 +3,16 @@ import * as vscode from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
     console.log('Extensión HTML-in-JS activada');
 
-    // Configurar Emmet solo para archivos JavaScript
     configureEmmet();
 
-    // Listener para cuando se abre un editor
     const activeEditorChange = vscode.window.onDidChangeActiveTextEditor(editor => {
         if (editor && editor.document.languageId === 'javascript') {
             configureEmmetForJavaScript(editor);
         }
     });
 
-    // Listener para cambios en el documento
     const documentChangeListener = vscode.workspace.onDidChangeTextDocument(event => {
         if (event.document.languageId === 'javascript') {
-            // Reconfigurar Emmet cuando el documento JavaScript cambia
             setTimeout(() => {
                 if (vscode.window.activeTextEditor?.document.languageId === 'javascript') {
                     configureEmmetForJavaScript(vscode.window.activeTextEditor);
@@ -25,19 +21,16 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    // Configurar para el editor actual si es JavaScript
     if (vscode.window.activeTextEditor?.document.languageId === 'javascript') {
         configureEmmetForJavaScript(vscode.window.activeTextEditor);
     }
 
     context.subscriptions.push(activeEditorChange, documentChangeListener);
 
-    // Provider de completado para archivos JavaScript únicamente
     const emmetCompletionProvider = vscode.languages.registerCompletionItemProvider(
         ['javascript'],
         {
             async provideCompletionItems(document, position, token, context) {
-                // Solo actuar si estamos en un contexto HTML válido dentro de JavaScript
                 if (!isInHtmlContext(document, position)) {
                     return undefined;
                 }
@@ -45,30 +38,25 @@ export function activate(context: vscode.ExtensionContext) {
                 const lineText = document.lineAt(position.line).text;
                 const beforeCursor = lineText.substring(0, position.character);
 
-                // Obtener la palabra actual
                 const wordRange = document.getWordRangeAtPosition(position);
                 const currentWord = wordRange ? document.getText(wordRange) : '';
 
-                // Si la palabra parece una abreviación Emmet, dar prioridad a Emmet
                 if (isLikelyEmmetAbbreviation(currentWord, beforeCursor)) {
                     try {
-                        // Intentar obtener sugerencias de Emmet
                         const emmetCompletions = await vscode.commands.executeCommand<vscode.CompletionList>(
                             'vscode.executeCompletionItemProvider',
                             document.uri,
                             position,
-                            undefined // trigger character
+                            undefined
                         );
 
                         if (emmetCompletions && emmetCompletions.items.length > 0) {
-                            // Filtrar y priorizar elementos de Emmet
                             const emmetItems = emmetCompletions.items.filter(item =>
                                 item.kind === vscode.CompletionItemKind.Snippet ||
                                 item.detail?.includes('Emmet') ||
                                 item.label.toString().includes('>')
                             );
 
-                            // Aumentar la prioridad de elementos Emmet
                             emmetItems.forEach(item => {
                                 item.sortText = '0' + (item.sortText || item.label.toString());
                                 item.preselect = true;
@@ -76,15 +64,12 @@ export function activate(context: vscode.ExtensionContext) {
 
                             return new vscode.CompletionList(emmetItems, false);
                         }
-                    } catch (error) {
-                        // Si falla, continuar con el comportamiento normal
-                    }
+                    } catch (error) {}
                 }
 
                 return undefined;
             }
         },
-        // Triggers importantes para Emmet
         '.', '#', '>', '+', '^', '*', ':', '(', ')', '[', ']'
     );
 
@@ -94,11 +79,9 @@ export function activate(context: vscode.ExtensionContext) {
 function configureEmmet() {
     const config = vscode.workspace.getConfiguration();
 
-    // Configurar Emmet para incluir JavaScript como HTML
     const emmetIncludeLanguages = config.get('emmet.includeLanguages') as { [key: string]: string } || {};
     emmetIncludeLanguages['javascript'] = 'html';
 
-    // Configurar opciones de Emmet para archivos JavaScript
     const updates = [
         { key: 'emmet.includeLanguages', value: emmetIncludeLanguages },
         { key: 'emmet.showExpandedAbbreviation', value: 'always' },
@@ -123,7 +106,6 @@ function configureEmmet() {
 function configureEmmetForJavaScript(editor: vscode.TextEditor) {
     const config = vscode.workspace.getConfiguration('emmet', editor.document.uri);
 
-    // Configuraciones específicas para JavaScript
     const workspaceUpdates = [
         { key: 'showExpandedAbbreviation', value: 'always' },
         { key: 'triggerExpansionOnTab', value: true },
@@ -143,22 +125,18 @@ function configureEmmetForJavaScript(editor: vscode.TextEditor) {
 }
 
 function isInHtmlContext(document: vscode.TextDocument, position: vscode.Position): boolean {
-    // Solo aplicar en archivos JavaScript
     if (document.languageId !== 'javascript') {
         return false;
     }
 
-    // Obtener el texto desde el inicio del documento hasta la posición actual
     const textBeforePosition = document.getText(new vscode.Range(0, 0, position.line, position.character));
 
-    // Buscar el patrón /*html*/` más cercano hacia atrás
     const htmlCommentRegex = /\/\*html\*\/\s*`/g;
     const backticksRegex = /`/g;
 
     let lastHtmlCommentIndex = -1;
     let match;
 
-    // Encontrar la última ocurrencia del comentario /*html*/`
     while ((match = htmlCommentRegex.exec(textBeforePosition)) !== null) {
         lastHtmlCommentIndex = match.index;
     }
@@ -167,18 +145,15 @@ function isInHtmlContext(document: vscode.TextDocument, position: vscode.Positio
         return false;
     }
 
-    // Contar backticks después del último comentario /*html*/
     const textAfterHtmlComment = textBeforePosition.substring(lastHtmlCommentIndex);
     const backticks = textAfterHtmlComment.match(backticksRegex);
 
-    // Si hay un número impar de backticks, estamos dentro del template literal
     return backticks !== null && backticks.length % 2 === 1;
 }
 
 function isLikelyEmmetAbbreviation(word: string, lineContext: string): boolean {
     if (!word) return false;
 
-    // Elementos HTML comunes
     const commonHtmlElements = [
         'p', 'div', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
         'a', 'img', 'ul', 'ol', 'li', 'nav', 'header', 'footer',
@@ -186,17 +161,14 @@ function isLikelyEmmetAbbreviation(word: string, lineContext: string): boolean {
         'button', 'label', 'select', 'option', 'textarea'
     ];
 
-    // Si la palabra es un elemento HTML común
     if (commonHtmlElements.includes(word.toLowerCase())) {
         return true;
     }
 
-    // Si contiene caracteres típicos de Emmet
     if (/[.#>+^*:\[\]()]/.test(word)) {
         return true;
     }
 
-    // Si el contexto de la línea sugiere HTML (espacios de indentación típicos de HTML)
     if (/^\s{2,}/.test(lineContext) && word.length <= 10) {
         return true;
     }
