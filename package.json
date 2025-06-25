@@ -1,6 +1,7 @@
 {
   "name": "html-in-js",
   "displayName": "HTML in JS",
+  "publisher": "DeusCL",
   "description": "A simple VSCode extension that adds HTML highlighting inside JS template literals",
   "version": "1.0.4",
   "icon": "images/logo.png",
